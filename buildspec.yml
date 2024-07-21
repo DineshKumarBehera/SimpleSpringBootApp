@@ -9,7 +9,7 @@ phases:
       - echo setting repository URI....
       - REPOSITORY_URI=671341857449.dkr.ecr.us-east-1.amazonaws.com/cicdpipeline
       - echo setting image tag....
-      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | aw
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
   build:
     commands:
       - echo building and tagging started image on `date`
@@ -30,6 +30,8 @@ phases:
       - echo writing image definitions file...
       - printf '[{"name":"%s", "imageUri":"%s"}]' DOCKER_CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
       - echo $DOCKER_CONTAINER_NAME
+      - echo printing imagedefinitions.json
+      - cat imagedefinitions.json
 artifacts:
   files:
     - imagedinitions.json
